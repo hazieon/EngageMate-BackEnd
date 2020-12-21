@@ -2,28 +2,28 @@ var express = require("express");
 var router = express.Router();
 
 const {
-  getAllUsers,
-  getUserById,
-  addUser,
-  updateUser,
-  deleteUser,
+  getAllSessions,
+  getSessionByCoach,
+  addSession,
+  updateSession,
+  deleteSession,
 } = require("../models/data");
 
 /* GET users listing. */
 
 router.get("/", async function(req, res, next) {
   try {
-    const result = await getAllUsers();
+    const result = await getAllSessions();
     res.json({ success: true, data: result });
   } catch (err) {
     console.log(err);
   }
 });
 
-router.get("/:id", async function(req, res, next) {
+router.get("/:coach", async function(req, res, next) {
   try {
-    const id = req.params.id;
-    const result = await getUserById(id);
+    const coach = req.params.coach;
+    const result = await getSessionByCoach(coach);
     res.json({ success: true, data: result });
   } catch (err) {
     console.log(err);
@@ -35,9 +35,9 @@ router.post("/", async function(req, res, next) {
     console.log("post request");
     const { body } = req;
     console.log(body);
-    const myNewData = await addUser(body);
+    const myNewData = await addSession(body);
     console.log(myNewData);
-    res.json({ message: `You have added a new user` });
+    res.json({ message: `You have added a new session` });
   } catch (err) {
     console.log(err);
   }
@@ -46,7 +46,7 @@ router.post("/", async function(req, res, next) {
 router.delete("/:id", async function(req, res, next) {
   try {
     const id = req.params.id;
-    const deletedUser = await deleteUser(id);
+    const deletedSession = await deleteSession(id);
     res.json({ success: true });
     console.log("deleted user");
   } catch (err) {
@@ -61,9 +61,9 @@ router.patch("/:id", async function(req, res, next) {
     console.log(body);
     const { id } = req.params;
     console.log(id);
-    const result = await updateUser(id, body);
+    const result = await updateSession(id, body);
     res.json({ success: true });
-    console.log("patched user with email: " + result[0].email);
+    console.log("patched session");
   } catch (err) {
     console.log(err);
   }
