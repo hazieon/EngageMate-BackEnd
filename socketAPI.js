@@ -1,9 +1,23 @@
 let socket_io = require("socket.io");
 let io = socket_io();
 let socketAPI = {};
-const { userJoin, users, getNumberOfUsersByRoom, userLeave } = require("./utils/users");
+const {
+  userJoin,
+  users,
+  getNumberOfUsersByRoom,
+  userLeave,
+} = require("./utils/users");
+
+const {
+  sessionData,
+  updateSession,
+  resetSessionData,
+} = require("./utils/sessionData");
 
 socketAPI.io = io;
+
+// Global Variables
+let timeoutId;
 
 // Socket Logic
 io.on("connection", (socket) => {
@@ -22,11 +36,11 @@ io.on("connection", (socket) => {
     console.log(`${user.name} has joined room ${user.room}`);
     console.log(`${users.length} users connected`);
     console.log(
-      `${getNumberOfUsersByRoom(user.room)} are in room ${user.room}`
+      `${getNumberOfUsersByRoom(user.room).length} user(s) in room ${user.room}`
     );
 
     // emit session data to everyone.
-    io.to(user.room).emit("", () => {});
+    // io.to(user.room).emit("", () => {});
   });
 
   // start
@@ -35,6 +49,28 @@ io.on("connection", (socket) => {
     // set the timer value in the session
     // emit question and timer to everyone
     // start timer on server
+    updateSession("question", question);
+    io.to("thumbometer").emit("startThumb", { sessionData, timer });
+    // start timer;
+    let counter = timer;
+    let intervalId = setInterval(() => {
+      io.to("thumbometer").emit("counter", counter);
+      counter--;
+      console.log({ counter });
+      if (counter === 0) {
+        console.log("timer finished");
+        io.to("thumbometer").emit("finished", { sessionData });
+        clearInterval(intervalId);
+      }
+    }, 1000);
+
+    // Client side code
+    /* 
+    socket.on('counter', function(count){
+      render the count accordingly
+      disable slider
+    }); 
+      */
   });
 
   // submission
@@ -56,7 +92,7 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log(`A user has left!`);
     const result = userLeave(socket.id);
-    console.log(`disconnect success result:`, {result})
+    console.log(`disconnect success result:`, { result });
   });
 });
 

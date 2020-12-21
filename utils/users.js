@@ -1,5 +1,4 @@
-import {updateSession} from "./sessionData"
-
+const { updateSession } = require("./sessionData");
 
 const users = [];
 
@@ -24,25 +23,21 @@ function getNumberOfUsersByRoom(room) {
 }
 
 //remove user from users array and session data
-function userLeave(id){ //takes in socket.id
-  const index = users.indexOf((user)=>user.id===id); //find id of user that left
-  if(index>=0){ //if not -1 (not found)
-    users.splice(index, 1) //remove user from users array
+function userLeave(id) {
+  //takes in socket.id
+  const index = users.findIndex((user) => user.id === id); //find id of user that left
+  console.log({ id });
+  console.log({ index });
+  if (index >= 0) {
+    //if not -1 (not found)
+    users.splice(index, 1); //remove user from users array
     updateSession("participants", users.length); //updates sessionData(using func)
-    console.log(`from userLeave:`,{users});
+    console.log(`True from userLeave:`, { users });
     return true;
-  }
-  
-  else{
-    return false
+  } else {
+    console.log(`False from userLeave:`, { users });
+    return false;
   }
 }
-
-
-
-
-
-
-
 
 module.exports = { userJoin, users, getNumberOfUsersByRoom, userLeave };
