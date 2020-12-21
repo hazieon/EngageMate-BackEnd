@@ -1,6 +1,9 @@
+import {updateSession} from "./sessionData"
+
+
 const users = [];
 
-// add user to list
+// add user to list, update session
 function userJoin(id, name, role, room) {
   const user = {
     id,
@@ -9,6 +12,7 @@ function userJoin(id, name, role, room) {
     room,
   };
   users.push(user);
+  updateSession("participants", users.length);
   console.log({ user });
   return user;
 }
@@ -19,4 +23,26 @@ function getNumberOfUsersByRoom(room) {
   return usersArray;
 }
 
-module.exports = { userJoin, users, getNumberOfUsersByRoom };
+//remove user from users array and session data
+function userLeave(id){ //takes in socket.id
+  const index = users.indexOf((user)=>user.id===id); //find id of user that left
+  if(index>=0){ //if not -1 (not found)
+    users.splice(index, 1) //remove user from users array
+    updateSession("participants", users.length); //updates sessionData(using func)
+    console.log(`from userLeave:`,{users});
+    return true;
+  }
+  
+  else{
+    return false
+  }
+}
+
+
+
+
+
+
+
+
+module.exports = { userJoin, users, getNumberOfUsersByRoom, userLeave };

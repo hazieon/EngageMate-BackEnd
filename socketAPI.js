@@ -1,7 +1,7 @@
 let socket_io = require("socket.io");
 let io = socket_io();
 let socketAPI = {};
-const { userJoin, users, getNumberOfUsersByRoom } = require("./utils/users");
+const { userJoin, users, getNumberOfUsersByRoom, userLeave } = require("./utils/users");
 
 socketAPI.io = io;
 
@@ -55,6 +55,8 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log(`A user has left!`);
+    const result = userLeave(socket.id);
+    console.log(`disconnect success result:`, {result})
   });
 });
 
