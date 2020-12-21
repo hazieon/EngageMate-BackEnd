@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node -r dotenv/config ./bin/www",
     "createTable": "node -r dotenv/config db/scripts/createTable.js",
-    "populateTable": "node -r dotenv/config db/scripts/populateTable.js"
+    "populateTable": "node -r dotenv/config db/scripts/populateTable.js",
+    "selectTable": "node -r dotenv/config db/scripts/selectTable.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
