@@ -47,11 +47,19 @@ function getThumbSubmissions(){
 
 function calculateSubmissions(){
 //useReducer to calc result
-
-let result = thumbSubmissions.reduce((acc, cur)=>{return acc+Number(cur.value)},0)
+console.log("calculating...")
+let max = (thumbSubmissions.length * 100)
+let actual = thumbSubmissions.reduce((acc, cur)=>{return acc+Number(cur.value)},0)
+let result = ((actual/max)*100)
+console.log({max})
+console.log({actual})
 console.log(`calculated submissions:`, result)
 return result;
 }
+
+//calculate maximum possible result if all were 100
+//calc the actual result from the submitted responses
+//calc a percentage result from these values
 
 
 module.exports ={thumbSubmissions, addSubmission, updateSubmission, getThumbSubmissions, resetSubmissions, calculateSubmissions}

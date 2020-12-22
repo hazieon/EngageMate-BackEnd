@@ -32,7 +32,7 @@ function resetSessionData() {
     id: uuidv4(),
     participants: 0,
     submissions: 0,
-    overallOutcome: 0,
+    thumbometerResult: 0,
     question: "",
   };
   console.log(`reset session data!`);

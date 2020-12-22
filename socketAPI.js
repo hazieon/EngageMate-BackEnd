@@ -20,7 +20,7 @@ const { thumbSubmissions, addSubmission,  getThumbSubmissions, calculateSubmissi
 socketAPI.io = io;
 
 // Global Variables
-let timeoutId;
+let intervalId;
 
 // Socket Logic
 io.on("connection", (socket) => {
@@ -52,14 +52,17 @@ io.on("connection", (socket) => {
     // set the timer value in the session
     // emit question and timer to everyone
     // start timer on server
-    updateSession("question", question);
+    resetSessionData();
+    resetSubmissions();
+    updateSession("participants", users.length); //sets ppt number
+    updateSession("question", question);         //sets question
     io.to("thumbometer").emit("startThumb", {
       sessionData: getSessionData(), 
       timer,
     });
     // start timer;
     let counter = timer;
-    let intervalId = setInterval(() => {
+    intervalId = setInterval(() => {
       io.to("thumbometer").emit("counter", counter);
       counter--;
       console.log({ counter });
@@ -101,8 +104,11 @@ io.on("connection", (socket) => {
   // stopTimer
   socket.on("stopTimer", () => {
     // end of session
+    clearInterval(intervalId);
+    console.log(`timer stopped! Session ended`, getSessionData())
     // stop timer on server
     // send message to participants to disable the slider
+    io.to("thumbometer").emit("finished", {sessionData: getSessionData()})
     // send the final state of the session data.
   });
 
