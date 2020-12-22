@@ -11,7 +11,7 @@ const {
 
 /* GET users listing. */
 
-router.get("/", async function(req, res, next) {
+router.get("/", async function (req, res, next) {
   try {
     const result = await getAllUsers();
     res.json({ success: true, data: result });
@@ -20,7 +20,7 @@ router.get("/", async function(req, res, next) {
   }
 });
 
-router.get("/:id", async function(req, res, next) {
+router.get("/:id", async function (req, res, next) {
   try {
     const id = req.params.id;
     const result = await getUserById(id);
@@ -30,7 +30,7 @@ router.get("/:id", async function(req, res, next) {
   }
 });
 
-router.post("/", async function(req, res, next) {
+router.post("/", async function (req, res, next) {
   try {
     console.log("post request");
     const { body } = req;
@@ -43,7 +43,7 @@ router.post("/", async function(req, res, next) {
   }
 });
 
-router.delete("/:id", async function(req, res, next) {
+router.delete("/:id", async function (req, res, next) {
   try {
     const id = req.params.id;
     const deletedUser = await deleteUser(id);
@@ -54,7 +54,7 @@ router.delete("/:id", async function(req, res, next) {
   }
 });
 
-router.patch("/:id", async function(req, res, next) {
+router.patch("/:id", async function (req, res, next) {
   try {
     console.log("test");
     const { body } = req;
@@ -63,7 +63,7 @@ router.patch("/:id", async function(req, res, next) {
     console.log(id);
     const result = await updateUser(id, body);
     res.json({ success: true });
-    console.log("patched user with email: " + result[0].email);
+    console.log("patched user with email: " + result.email);
   } catch (err) {
     console.log(err);
   }
