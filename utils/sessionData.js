@@ -2,11 +2,13 @@ const { v4: uuidv4 } = require("uuid");
 
 let sessionData = {
   id: uuidv4(),
-  participants: 0,
-  submissions: 0,
-  overallOutcome: 0,
+  participants: 0,          //length of users list array
+  submissions: 0,           //length of submissions array
+  thumbometerResult: 0,        //total value of submissions values
   question: "",
 };
+
+//once timer ends, ^ these values become the submitted session data
 
 //functions to manipulate session data
 
@@ -30,14 +32,20 @@ function resetSessionData() {
     id: uuidv4(),
     participants: 0,
     submissions: 0,
-    overallOutcome: 0,
+    thumbometerResult: 0,
     question: "",
   };
   console.log(`reset session data!`);
+}
+
+// getter for session data - grabs the current state of the data obj
+function getSessionData() {
+  return sessionData;
 }
 
 module.exports = {
   sessionData,
   updateSession,
   resetSessionData,
+  getSessionData,
 };

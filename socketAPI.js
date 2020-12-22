@@ -12,12 +12,15 @@ const {
   sessionData,
   updateSession,
   resetSessionData,
+  getSessionData,
 } = require("./utils/sessionData");
+
+const { thumbSubmissions, addSubmission,  getThumbSubmissions, calculateSubmissions, checkSubmissions, resetSubmissions} = require("./utils/submissions");
 
 socketAPI.io = io;
 
 // Global Variables
-let timeoutId;
+let intervalId;
 
 // Socket Logic
 io.on("connection", (socket) => {
@@ -49,17 +52,25 @@ io.on("connection", (socket) => {
     // set the timer value in the session
     // emit question and timer to everyone
     // start timer on server
-    updateSession("question", question);
-    io.to("thumbometer").emit("startThumb", { sessionData, timer });
+    resetSessionData();
+    resetSubmissions();
+    updateSession("participants", users.length); //sets ppt number
+    updateSession("question", question);         //sets question
+    io.to("thumbometer").emit("startThumb", {
+      sessionData: getSessionData(), 
+      timer,
+    });
     // start timer;
     let counter = timer;
-    let intervalId = setInterval(() => {
+    intervalId = setInterval(() => {
       io.to("thumbometer").emit("counter", counter);
       counter--;
       console.log({ counter });
       if (counter === 0) {
         console.log("timer finished");
-        io.to("thumbometer").emit("finished", { sessionData });
+        io.to("thumbometer").emit("finished", {
+          sessionData: getSessionData(),
+        });
         clearInterval(intervalId);
       }
     }, 1000);
@@ -74,18 +85,30 @@ io.on("connection", (socket) => {
   });
 
   // submission
-  socket.on("submission", () => {
-    // receive a value and some identifying
-    // add to submission array, if it does not already exist
-    // update the session
-    // emit updated session data to everyone
+  socket.on("submission", ({ value }) => {
+    // receive a value and some identifier - add, update, read, check duplicates, save, reset, getter
+    addSubmission({"id":socket.id, 
+                      "value": value});
+    let thumbSubmissionsFetch = getThumbSubmissions();
+    updateSession("submissions", thumbSubmissionsFetch.length);    //updates session data obj with number of submissions
+    let thumbometerValue = calculateSubmissions();  //calculates the total submissions value for thumbometer
+    updateSession("thumbometerResult", thumbometerValue); //updates session data obj with the calculated total value
+    
+    // emit updated session data to everyone -> emit to speakers real time
+    io.to("thumbometer").emit("thumbUpdate", {sessionData: getSessionData()})   
+    console.log(
+      `Submission received from: \n socket_id: ${socket.id} \n value: ${value}`
+    );
   });
 
   // stopTimer
   socket.on("stopTimer", () => {
     // end of session
+    clearInterval(intervalId);
+    console.log(`timer stopped! Session ended`, getSessionData())
     // stop timer on server
     // send message to participants to disable the slider
+    io.to("thumbometer").emit("finished", {sessionData: getSessionData()})
     // send the final state of the session data.
   });
 
@@ -97,3 +120,7 @@ io.on("connection", (socket) => {
 });
 
 module.exports = socketAPI;
+
+
+//total value of submissions -> result
+//store this result in sessionData object 
