@@ -27,7 +27,7 @@ function addSubmission(submissionObj){
     let result = checkExists(submissionObj.id);
     if(result>=0){
         console.log('updating...')
-     updateSubmission(submissionObj, index);
+     updateSubmission(submissionObj, result);
     }
     else{thumbSubmissions = [...thumbSubmissions, submissionObj]
     console.log(`Added to submissions:`, submissionObj)}

@@ -15,7 +15,7 @@ const {
   getSessionData,
 } = require("./utils/sessionData");
 
-const { addSubmission, thumbSubmissions, getThumbSubmissions } = require("./utils/submissions");
+const { thumbSubmissions, addSubmission,  getThumbSubmissions, calculateSubmissions, checkSubmissions, resetSubmissions} = require("./utils/submissions");
 
 socketAPI.io = io;
 
@@ -86,10 +86,10 @@ io.on("connection", (socket) => {
     // receive a value and some identifier - add, update, read, check duplicates, save, reset, getter
     addSubmission({"id":socket.id, 
                       "value": value});
-    thumbSubmissions = getThumbSubmissions();
-    updateSession(submissions, thumbSubmissions.length);    //updates session data obj with number of submissions
+    let thumbSubmissionsFetch = getThumbSubmissions();
+    updateSession("submissions", thumbSubmissionsFetch.length);    //updates session data obj with number of submissions
     let thumbometerValue = calculateSubmissions();  //calculates the total submissions value for thumbometer
-    updateSession(thumbometerResult, thumbometerValue); //updates session data obj with the calculated total value
+    updateSession("thumbometerResult", thumbometerValue); //updates session data obj with the calculated total value
     
     // emit updated session data to everyone -> emit to speakers real time
     io.to("thumbometer").emit("thumbUpdate", {sessionData: getSessionData()})   
