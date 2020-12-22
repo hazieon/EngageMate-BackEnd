@@ -12,6 +12,7 @@ const {
   sessionData,
   updateSession,
   resetSessionData,
+  getSessionData,
 } = require("./utils/sessionData");
 
 socketAPI.io = io;
@@ -50,7 +51,10 @@ io.on("connection", (socket) => {
     // emit question and timer to everyone
     // start timer on server
     updateSession("question", question);
-    io.to("thumbometer").emit("startThumb", { sessionData, timer });
+    io.to("thumbometer").emit("startThumb", {
+      sessionData: getSessionData(),
+      timer,
+    });
     // start timer;
     let counter = timer;
     let intervalId = setInterval(() => {
@@ -59,7 +63,9 @@ io.on("connection", (socket) => {
       console.log({ counter });
       if (counter === 0) {
         console.log("timer finished");
-        io.to("thumbometer").emit("finished", { sessionData });
+        io.to("thumbometer").emit("finished", {
+          sessionData: getSessionData(),
+        });
         clearInterval(intervalId);
       }
     }, 1000);
@@ -74,11 +80,14 @@ io.on("connection", (socket) => {
   });
 
   // submission
-  socket.on("submission", () => {
+  socket.on("submission", ({ value }) => {
     // receive a value and some identifying
     // add to submission array, if it does not already exist
     // update the session
     // emit updated session data to everyone
+    console.log(
+      `Submission received from: \n socket_id: ${socket.id} \n value: ${value}`
+    );
   });
 
   // stopTimer

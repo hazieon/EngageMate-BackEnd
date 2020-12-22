@@ -36,8 +36,14 @@ function resetSessionData() {
   console.log(`reset session data!`);
 }
 
+// getter for session data
+function getSessionData() {
+  return sessionData;
+}
+
 module.exports = {
   sessionData,
   updateSession,
   resetSessionData,
+  getSessionData,
 };
