@@ -1,5 +1,6 @@
 let socket_io = require("socket.io");
-let io = socket_io();
+const { server } = require("./app");
+let io = socket_io(server);
 let socketAPI = {};
 const {
   userJoin,
@@ -15,7 +16,14 @@ const {
   getSessionData,
 } = require("./utils/sessionData");
 
-const { thumbSubmissions, addSubmission,  getThumbSubmissions, calculateSubmissions, checkSubmissions, resetSubmissions} = require("./utils/submissions");
+const {
+  thumbSubmissions,
+  addSubmission,
+  getThumbSubmissions,
+  calculateSubmissions,
+  checkSubmissions,
+  resetSubmissions,
+} = require("./utils/submissions");
 
 socketAPI.io = io;
 
@@ -55,22 +63,40 @@ io.on("connection", (socket) => {
     resetSessionData();
     resetSubmissions();
     updateSession("participants", users.length); //sets ppt number
-    updateSession("question", question);         //sets question
+    updateSession("question", question); //sets question
     io.to("thumbometer").emit("startThumb", {
-      sessionData: getSessionData(), 
+      sessionData: getSessionData(),
       timer,
     });
     // start timer;
-    let counter = timer;
+    let counter = parseInt(timer);
     intervalId = setInterval(() => {
       io.to("thumbometer").emit("counter", counter);
       counter--;
-      console.log({ counter });
+      console.log(counter);
+      console.log(question);
+      socket.on("submission", ({ value }) => {
+        // receive a value and some identifier - add, update, read, check duplicates, save, reset, getter
+        addSubmission({ id: socket.id, value: value });
+        let thumbSubmissionsFetch = getThumbSubmissions();
+        updateSession("submissions", thumbSubmissionsFetch.length); //updates session data obj with number of submissions
+        let thumbometerValue = calculateSubmissions(); //calculates the total submissions value for thumbometer
+        updateSession("thumbometerResult", thumbometerValue); //updates session data obj with the calculated total value
+
+        // emit updated session data to everyone -> emit to speakers real time
+        io.to("thumbometer").emit("thumbUpdate", {
+          sessionData: getSessionData(),
+        });
+        console.log(
+          `Submission received from: \n socket_id: ${socket.id} \n value: ${value}`
+        );
+      });
       if (counter === 0) {
         console.log("timer finished");
         io.to("thumbometer").emit("finished", {
           sessionData: getSessionData(),
         });
+
         clearInterval(intervalId);
       }
     }, 1000);
@@ -85,30 +111,15 @@ io.on("connection", (socket) => {
   });
 
   // submission
-  socket.on("submission", ({ value }) => {
-    // receive a value and some identifier - add, update, read, check duplicates, save, reset, getter
-    addSubmission({"id":socket.id, 
-                      "value": value});
-    let thumbSubmissionsFetch = getThumbSubmissions();
-    updateSession("submissions", thumbSubmissionsFetch.length);    //updates session data obj with number of submissions
-    let thumbometerValue = calculateSubmissions();  //calculates the total submissions value for thumbometer
-    updateSession("thumbometerResult", thumbometerValue); //updates session data obj with the calculated total value
-    
-    // emit updated session data to everyone -> emit to speakers real time
-    io.to("thumbometer").emit("thumbUpdate", {sessionData: getSessionData()})   
-    console.log(
-      `Submission received from: \n socket_id: ${socket.id} \n value: ${value}`
-    );
-  });
 
   // stopTimer
   socket.on("stopTimer", () => {
     // end of session
     clearInterval(intervalId);
-    console.log(`timer stopped! Session ended`, getSessionData())
+    console.log(`timer stopped! Session ended`, getSessionData());
     // stop timer on server
     // send message to participants to disable the slider
-    io.to("thumbometer").emit("finished", {sessionData: getSessionData()})
+    io.to("thumbometer").emit("finished", { sessionData: getSessionData() });
     // send the final state of the session data.
   });
 
@@ -121,6 +132,5 @@ io.on("connection", (socket) => {
 
 module.exports = socketAPI;
 
-
 //total value of submissions -> result
-//store this result in sessionData object 
+//store this result in sessionData object

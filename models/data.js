@@ -11,11 +11,12 @@ async function getAllSessions() {
 }
 
 async function getUserById(id) {
-  const result = await query(`SELECT * FROM users WHERE bootcamperId = $1`, [
-    id,
-  ]);
+  const result = await query(
+    `SELECT bootcamperId FROM users WHERE bootcamperId = $1`,
+    [id]
+  );
 
-  return result.rows;
+  return result.rows[0];
 }
 
 async function getSessionByCoach(name) {
@@ -66,7 +67,7 @@ async function addSession(session) {
 
 async function deleteUser(id) {
   const result = await query(
-    `DELETE FROM users WHERE bootcamperId = $1 RETURNING id`,
+    `DELETE FROM users WHERE bootcamperId = $1 RETURNING bootcamperId`,
     [id]
   );
   //console.log (result.rows[0])

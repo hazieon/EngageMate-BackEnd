@@ -11,26 +11,30 @@ const {
 
 /* GET users listing. */
 
-router.get("/", async function (req, res, next) {
+router.get("/", async function(req, res, next) {
   try {
     const result = await getAllUsers();
-    res.json({ success: true, data: result });
+    result
+      ? res.json({ success: true, data: result })
+      : res.json({ success: false, message: "nothing in the database" });
   } catch (err) {
     console.log(err);
   }
 });
 
-router.get("/:id", async function (req, res, next) {
+router.get("/:id", async function(req, res, next) {
   try {
     const id = req.params.id;
     const result = await getUserById(id);
-    res.json({ success: true, data: result });
+    result
+      ? res.json({ success: true, data: result })
+      : res.json({ success: false, message: "no such user" });
   } catch (err) {
     console.log(err);
   }
 });
 
-router.post("/", async function (req, res, next) {
+router.post("/", async function(req, res, next) {
   try {
     console.log("post request");
     const { body } = req;
@@ -43,18 +47,19 @@ router.post("/", async function (req, res, next) {
   }
 });
 
-router.delete("/:id", async function (req, res, next) {
+router.delete("/:id", async function(req, res, next) {
   try {
     const id = req.params.id;
     const deletedUser = await deleteUser(id);
-    res.json({ success: true });
-    console.log("deleted user");
+    deletedUser
+      ? res.json({ success: true, payload: `deleted user ${deletedUser}` })
+      : res.json({ success: false, payload: "no such user" });
   } catch (err) {
     console.log(err);
   }
 });
 
-router.patch("/:id", async function (req, res, next) {
+router.patch("/:id", async function(req, res, next) {
   try {
     console.log("test");
     const { body } = req;
