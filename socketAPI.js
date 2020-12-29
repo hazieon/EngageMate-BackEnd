@@ -69,28 +69,12 @@ io.on("connection", (socket) => {
       timer,
     });
     // start timer;
-    let counter = parseInt(timer);
+    let counter = timer;
     intervalId = setInterval(() => {
       io.to("thumbometer").emit("counter", counter);
       counter--;
-      console.log(counter);
-      console.log(question);
-      socket.on("submission", ({ value }) => {
-        // receive a value and some identifier - add, update, read, check duplicates, save, reset, getter
-        addSubmission({ id: socket.id, value: value });
-        let thumbSubmissionsFetch = getThumbSubmissions();
-        updateSession("submissions", thumbSubmissionsFetch.length); //updates session data obj with number of submissions
-        let thumbometerValue = calculateSubmissions(); //calculates the total submissions value for thumbometer
-        updateSession("thumbometerResult", thumbometerValue); //updates session data obj with the calculated total value
+      console.log({ counter });
 
-        // emit updated session data to everyone -> emit to speakers real time
-        io.to("thumbometer").emit("thumbUpdate", {
-          sessionData: getSessionData(),
-        });
-        console.log(
-          `Submission received from: \n socket_id: ${socket.id} \n value: ${value}`
-        );
-      });
       if (counter === 0) {
         console.log("timer finished");
         io.to("thumbometer").emit("finished", {
@@ -111,7 +95,22 @@ io.on("connection", (socket) => {
   });
 
   // submission
+  socket.on("submission", ({ value }) => {
+    // receive a value and some identifier - add, update, read, check duplicates, save, reset, getter
+    addSubmission({ id: socket.id, value: value });
+    let thumbSubmissionsFetch = getThumbSubmissions();
+    updateSession("submissions", thumbSubmissionsFetch.length); //updates session data obj with number of submissions
+    let thumbometerValue = calculateSubmissions(); //calculates the total submissions value for thumbometer
+    updateSession("thumbometerResult", thumbometerValue); //updates session data obj with the calculated total value
 
+    // emit updated session data to everyone -> emit to speakers real time
+    io.to("thumbometer").emit("thumbUpdate", {
+      sessionData: getSessionData(),
+    });
+    console.log(
+      `Submission received from: \n socket_id: ${socket.id} \n value: ${value}`
+    );
+  });
   // stopTimer
   socket.on("stopTimer", () => {
     // end of session

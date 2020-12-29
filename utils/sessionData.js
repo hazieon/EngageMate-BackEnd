@@ -21,9 +21,8 @@ function updateSession(property, value) {
   if (sessionData.hasOwnProperty(property)) {
     //updates sessionData object with the new value
     sessionData = { ...sessionData, [property]: value };
-    return sessionData;
   } else {
-    return sessionData;
+    sessionData = sessionData;
   }
   console.log(`from updateSession:`, { sessionData });
 }
@@ -46,7 +45,7 @@ function resetSessionData() {
 
 // getter for session data - grabs the current state of the data obj
 function getSessionData() {
-  sessionData = updateSession();
+  return sessionData;
 }
 
 module.exports = {
