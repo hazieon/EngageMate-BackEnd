@@ -19,6 +19,12 @@ async function getUserById(id) {
   return result.rows[0];
 }
 
+async function getUserByEmail(email) {
+  const result = await query(`SELECT * FROM users WHERE email = $1`, [email]);
+
+  return result.rows[0];
+}
+
 async function getSessionByCoach(name) {
   const result = await query(`SELECT * FROM session WHERE coach = $1`, [name]);
   return result.rows;
@@ -118,6 +124,7 @@ async function updateSession(id, session) {
 module.exports = {
   getAllUsers,
   getUserById,
+  getUserByEmail,
   addUser,
   deleteUser,
   updateUser,

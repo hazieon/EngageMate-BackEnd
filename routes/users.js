@@ -4,6 +4,7 @@ var router = express.Router();
 const {
   getAllUsers,
   getUserById,
+  getUserByEmail,
   addUser,
   updateUser,
   deleteUser,
@@ -22,10 +23,22 @@ router.get("/", async function(req, res, next) {
   }
 });
 
+// router.get("/:id", async function(req, res, next) {
+//   try {
+//     const id = req.params.id;
+//     console.log(id);
+//     const result = await getUserById(id);
+//     result
+//       ? res.json({ success: true, data: result })
+//       : res.json({ success: false, message: "no such user" });
+//   } catch (err) {
+//     console.log(err);
+//   }
+// });
 router.get("/:id", async function(req, res, next) {
   try {
-    const id = req.params.id;
-    const result = await getUserById(id);
+    const email = req.params.id;
+    const result = await getUserByEmail(email);
     result
       ? res.json({ success: true, data: result })
       : res.json({ success: false, message: "no such user" });
