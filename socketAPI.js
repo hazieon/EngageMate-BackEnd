@@ -69,11 +69,11 @@ io.on("connection", (socket) => {
       timer,
     });
     // start timer;
-    let counter = timer;
+    let counter = Number(timer);
     intervalId = setInterval(() => {
       io.to("thumbometer").emit("counter", counter);
-      counter--;
       console.log({ counter });
+      counter--;
 
       if (counter === 0) {
         console.log("timer finished");
@@ -99,9 +99,9 @@ io.on("connection", (socket) => {
     // receive a value and some identifier - add, update, read, check duplicates, save, reset, getter
     addSubmission({ id: socket.id, value: value });
     let thumbSubmissionsFetch = getThumbSubmissions();
-    updateSession("submissions", thumbSubmissionsFetch.length); //updates session data obj with number of submissions
+    updateSession("responses", thumbSubmissionsFetch.length); //updates session data obj with number of submissions
     let thumbometerValue = calculateSubmissions(); //calculates the total submissions value for thumbometer
-    updateSession("thumbometerResult", thumbometerValue); //updates session data obj with the calculated total value
+    updateSession("outcome", thumbometerValue); //updates session data obj with the calculated total value
 
     // emit updated session data to everyone -> emit to speakers real time
     io.to("thumbometer").emit("thumbUpdate", {
