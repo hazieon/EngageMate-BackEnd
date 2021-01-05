@@ -62,12 +62,12 @@ async function addSession(session) {
     coach,
     date,
   } = session;
-  console.log("testing");
+
   const result = await query(
     `INSERT INTO session(uuid, participants, responses, outcome, question, coach, date) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
     [uuid, participants, responses, outcome, question, coach, date]
   );
-  console.log("testing again");
+
   return result.rows[0];
 }
 
