@@ -56,44 +56,44 @@ io.on("connection", (socket) => {
 
   // start
   socket.on("start", ({ question, timer, name }) => {
-                       // set the question in the session
-                       // set the timer value in the session
-                       // emit question and timer to everyone
-                       // start timer on server
-                       resetSessionData();
-                       resetSubmissions();
-                       updateSession("participants", users.length); //sets ppt number
-                       updateSession("question", question); //sets question
-                       updateSession("coach", name); //sets coach name
-                       io.to("thumbometer").emit("startThumb", {
-                         sessionData: getSessionData(),
-                         timer,
-                       });
-                       // start timer;
-                       let counter = Number(timer);
-                       intervalId = setInterval(() => {
-                         io.to("thumbometer").emit("counter", counter);
-                         console.log({ counter });
-                         counter--;
+    // set the question in the session
+    // set the timer value in the session
+    // emit question and timer to everyone
+    // start timer on server
+    resetSessionData();
+    resetSubmissions();
+    updateSession("participants", users.length); //sets ppt number
+    updateSession("question", question); //sets question
+    updateSession("coach", name); //sets coach name
+    io.to("thumbometer").emit("startThumb", {
+      sessionData: getSessionData(),
+      timer,
+    });
+    // start timer;
+    let counter = Number(timer);
+    intervalId = setInterval(() => {
+      io.to("thumbometer").emit("counter", counter);
+      console.log({ counter });
+      counter--;
 
-                         if (counter === 0) {
-                           console.log("timer finished");
-                           io.to("thumbometer").emit("finished", {
-                             sessionData: getSessionData(),
-                           });
+      if (counter === 0) {
+        console.log("timer finished");
+        io.to("thumbometer").emit("finished", {
+          sessionData: getSessionData(),
+        });
 
-                           clearInterval(intervalId);
-                         }
-                       }, 1000);
+        clearInterval(intervalId);
+      }
+    }, 1000);
 
-                       // Client side code
-                       /* 
+    // Client side code
+    /* 
     socket.on('counter', function(count){
       render the count accordingly
       disable slider
     }); 
       */
-                     };);
+  });
 
   // submission
   socket.on("submission", ({ value }) => {
