@@ -9,6 +9,7 @@ let sessionData = {
   question: "",
   coach: "",
   date: moment().format("MMMM Do YYYY, h:mm:ss a"),
+  throwaway: false,
 };
 
 //once timer ends, ^ these values become the submitted session data
@@ -39,6 +40,7 @@ function resetSessionData() {
     question: "",
     coach: "",
     date: moment().format("MMMM Do YYYY, h:mm:ss a"),
+    throwaway: false,
   };
   console.log(`reset session data!`);
 }
