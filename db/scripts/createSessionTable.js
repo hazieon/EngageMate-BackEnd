@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS session(
     outcome VARCHAR,
     question VARCHAR,
     coach TEXT,
-    date VARCHAR
-    
+    date VARCHAR,
+    throwaway BOOL DEFAULT false
 )`;
 
 const createSessionTable = async () => {
