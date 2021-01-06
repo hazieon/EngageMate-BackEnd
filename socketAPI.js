@@ -55,7 +55,7 @@ io.on("connection", (socket) => {
   });
 
   // start
-  socket.on("start", ({ question, timer, name }) => {
+  socket.on("start", ({ question, timer, name, throwaway }) => {
     // set the question in the session
     // set the timer value in the session
     // emit question and timer to everyone
@@ -65,6 +65,7 @@ io.on("connection", (socket) => {
     updateSession("participants", users.length); //sets ppt number
     updateSession("question", question); //sets question
     updateSession("coach", name); //sets coach name
+    updateSession("throwaway", throwaway); // sets throwaway to true or false
     io.to("thumbometer").emit("startThumb", {
       sessionData: getSessionData(),
       timer,
