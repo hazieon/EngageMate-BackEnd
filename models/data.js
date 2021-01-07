@@ -61,11 +61,12 @@ async function addSession(session) {
     question,
     coach,
     date,
+    throwaway,
   } = session;
 
   const result = await query(
-    `INSERT INTO session(uuid, participants, responses, outcome, question, coach, date) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-    [uuid, participants, responses, outcome, question, coach, date]
+    `INSERT INTO session(uuid, participants, responses, outcome, question, coach, date, throwaway) VALUES($1, $2, $3, $4, $5, $6, $7,$8) RETURNING *`,
+    [uuid, participants, responses, outcome, question, coach, date, throwaway]
   );
 
   return result.rows[0];
