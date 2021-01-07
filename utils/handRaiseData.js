@@ -27,4 +27,9 @@ function resetHandRaiseInfo() {
   console.log("Hand reset...");
 }
 
-module.exports = { getHandRaiseInfo, addHandRaiseInfo, resetHandRaiseInfo };
+module.exports = {
+  getHandRaiseInfo,
+  addHandRaiseInfo,
+  resetHandRaiseInfo,
+  handRaiseSubmissions,
+};
