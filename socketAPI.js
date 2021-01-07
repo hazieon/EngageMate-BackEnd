@@ -187,5 +187,3 @@ io.on("connection", (socket) => {
 
 module.exports = socketAPI;
 
-//total value of submissions -> result
-//store this result in sessionData object
