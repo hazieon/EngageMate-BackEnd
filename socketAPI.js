@@ -62,6 +62,11 @@ io.on("connection", (socket) => {
     // io.to(user.room).emit("", () => {});
   });
 
+  socket.on("leftroom", () => {
+    socket.leave("thumbometer");
+    console.log("user left");
+  });
+
   // start
   socket.on("start", ({ question, timer, name, throwaway }) => {
     // set the question in the session
@@ -163,9 +168,8 @@ io.on("connection", (socket) => {
     console.log(
       `Someone has raised their hand: \n socket_id: ${socket.id} \n name ${name} \n topic ${topic} \n `
     );
-    io.to("speakerViewHandRaise").emit("handRaiseInfo", {
+    io.to("raisehand").emit("handRaiseInfo", {
       handRaiseData: getHandRaiseInfo(),
-      handRaiseSubmissions: handRaiseSubmissons.length,
     });
 
     /*ClentSide SpeakerView 
