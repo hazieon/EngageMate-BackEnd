@@ -30,7 +30,7 @@ const {
   getHandRaiseInfo,
   addHandRaiseInfo,
   resetHandRaiseInfo,
-  handRaiseSubmissons
+  handRaiseSubmissons,
 } = require("./utils/handRaiseData");
 
 socketAPI.io = io;
@@ -165,7 +165,7 @@ io.on("connection", (socket) => {
     );
     io.to("speakerViewHandRaise").emit("handRaiseInfo", {
       handRaiseData: getHandRaiseInfo(),
-      handRaiseSubmissions: handRaiseSubmissons.length
+      handRaiseSubmissions: handRaiseSubmissons.length,
     });
 
     /*ClentSide SpeakerView 
@@ -173,17 +173,14 @@ io.on("connection", (socket) => {
       setData(handRaiseData);
       setHandsRaised(handRaiseSubmissions)
     });*/
-      /* Client side speaker
+    /* Client side speaker
   
   Button to lower hands 
   socket.emit('lowerHand' )(*/
 
-    socket.on('lowerhand', () => {
-      resetHandRaiseInfo()
-    }
-    )
+    socket.on("lowerhand", () => {
+      resetHandRaiseInfo();
+    });
   });
-
-
+});
 module.exports = socketAPI;
-
