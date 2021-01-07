@@ -25,6 +25,12 @@ const {
   resetSubmissions,
 } = require("./utils/submissions");
 
+const {
+  getHandRaiseInfo,
+  addHandRaiseInfo,
+  resetHandRaiseInfo,
+} = require("./utils/handRaiseData");
+
 socketAPI.io = io;
 
 // Global Variables
@@ -129,6 +135,20 @@ io.on("connection", (socket) => {
     const result = userLeave(socket.id);
     console.log(`disconnect success result:`, { result });
   });
+
+  /////////////////////////// HAND RAISE /////////////////////////
+  getHandRaiseInfo,
+    addHandRaiseInfo,
+    resetHandRaiseInfo,
+    socket.on("hand raised", ({ name, topic, picture }) => {
+      addHandRaiseInfo({
+        id: socket.id,
+        name: name,
+        topic: topic,
+        picture: picture,
+      });
+    });
+  // on the client side socket.emit(name, topic)
 });
 
 module.exports = socketAPI;
