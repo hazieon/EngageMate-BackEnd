@@ -1,4 +1,5 @@
 let socket_io = require("socket.io");
+const moment = require("moment");
 const { server } = require("./app");
 let io = socket_io(server);
 let socketAPI = {};
@@ -24,6 +25,13 @@ const {
   checkSubmissions,
   resetSubmissions,
 } = require("./utils/submissions");
+
+const {
+  getHandRaiseInfo,
+  addHandRaiseInfo,
+  resetHandRaiseInfo,
+  handRaiseSubmissons
+} = require("./utils/handRaiseData");
 
 socketAPI.io = io;
 
@@ -99,7 +107,10 @@ io.on("connection", (socket) => {
   // submission
   socket.on("submission", ({ value }) => {
     // receive a value and some identifier - add, update, read, check duplicates, save, reset, getter
-    addSubmission({ id: socket.id, value: value });
+    addSubmission({
+      id: socket.id,
+      value: value,
+    });
     let thumbSubmissionsFetch = getThumbSubmissions();
     updateSession("responses", thumbSubmissionsFetch.length); //updates session data obj with number of submissions
     let thumbometerValue = calculateSubmissions(); //calculates the total submissions value for thumbometer
@@ -120,16 +131,59 @@ io.on("connection", (socket) => {
     console.log(`timer stopped! Session ended`, getSessionData());
     // stop timer on server
     // send message to participants to disable the slider
-    io.to("thumbometer").emit("finished", { sessionData: getSessionData() });
+    io.to("thumbometer").emit("finished", {
+      sessionData: getSessionData(),
+    });
     // send the final state of the session data.
   });
 
   socket.on("disconnect", () => {
     console.log(`A user has left!`);
     const result = userLeave(socket.id);
-    console.log(`disconnect success result:`, { result });
+    console.log(`disconnect success result:`, {
+      result,
+    });
   });
-});
+
+  /* Client side PTView
+  click button to raise hand
+  function raiseHand(name, topic, picture) {
+    socket.emit("handRaised", { name: name(from Auth Data) topic: topic(from input field on ptview), picture: picture(from auth data)});
+  }*/
+
+  socket.on("handRaised", ({ name, topic, picture }) => {
+    addHandRaiseInfo({
+      id: socket.id,
+      name: name,
+      topic: topic,
+      picture: picture,
+      time: moment().format("h:mm:ss a"),
+    });
+
+    console.log(
+      `Someone has raised their hand: \n socket_id: ${socket.id} \n name ${name} \n topic ${topic} \n `
+    );
+    io.to("speakerViewHandRaise").emit("handRaiseInfo", {
+      handRaiseData: getHandRaiseInfo(),
+      handRaiseSubmissions: handRaiseSubmissons.length
+    });
+
+    /*ClentSide SpeakerView 
+    socket.on("handRaiseInfo", ({ handRaiseData, handRaiseSubmissions }) => {
+      setData(handRaiseData);
+      setHandsRaised(handRaiseSubmissions)
+    });*/
+      /* Client side speaker
+  
+  Button to lower hands 
+  socket.emit('lowerHand' )(*/
+
+    socket.on('lowerhand', () => {
+      resetHandRaiseInfo()
+    }
+    )
+  });
+
 
 module.exports = socketAPI;
 
