@@ -10,7 +10,10 @@ function userJoin(id, name, role, room) {
     role,
     room,
   };
-  users.push(user);
+  const index = users.findIndex((user) => user.id === id);
+  // check to see if participant is already in the room so that duplicates don't occur
+  index >= 0 ? console.log("participant already in room") : users.push(user);
+
   updateSession("participants", users.length);
   console.log({ user });
   return user;
