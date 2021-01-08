@@ -11,6 +11,13 @@ const {
 } = require("./utils/users");
 
 const {
+  handRaiser,
+  handRaisers,
+  handRaiserLeft,
+  getNumberOfhandRaisersByRoom,
+} = require("./utils/handRaisers");
+
+const {
   sessionData,
   updateSession,
   resetSessionData,
@@ -62,10 +69,10 @@ io.on("connection", (socket) => {
     // io.to(user.room).emit("", () => {});
   });
 
-  socket.on("leftroom", () => {
-    socket.leave("thumbometer");
-    console.log("user left");
-  });
+  // socket.on("leftroom", () => {
+  //   socket.leave("thumbometer");
+  //   console.log("user left");
+  // });
 
   // start
   socket.on("start", ({ question, timer, name, throwaway }) => {
@@ -150,12 +157,24 @@ io.on("connection", (socket) => {
     });
   });
 
-  /* Client side PTView
-  click button to raise hand
-  function raiseHand(name, topic, picture) {
-    socket.emit("handRaised", { name: name(from Auth Data) topic: topic(from input field on ptview), picture: picture(from auth data)});
-  }*/
+  /////////////////////////////// Hand Raised ///////////////////////////
 
+  socket.on("raisehandroom", ({ name, room }) => {
+    // add user to the user list
+    const user = handRaiser(socket.id, name, room);
+
+    // socket.join(user.room)
+    socket.join(user.room);
+
+    // console.log(user has joined room, updated amount of participants)
+    console.log(`${user.name} has joined room ${user.room}`);
+    console.log(`${handRaisers.length} users connected`);
+    console.log(
+      `${getNumberOfhandRaisersByRoom(user.room).length} user(s) in room ${
+        user.room
+      }`
+    );
+  });
   socket.on("handRaised", ({ name, topic, picture }) => {
     addHandRaiseInfo({
       id: socket.id,
@@ -168,19 +187,10 @@ io.on("connection", (socket) => {
     console.log(
       `Someone has raised their hand: \n socket_id: ${socket.id} \n name ${name} \n topic ${topic} \n `
     );
+
     io.to("raisehand").emit("handRaiseInfo", {
       handRaiseData: getHandRaiseInfo(),
     });
-
-    /*ClentSide SpeakerView 
-    socket.on("handRaiseInfo", ({ handRaiseData, handRaiseSubmissions }) => {
-      setData(handRaiseData);
-      setHandsRaised(handRaiseSubmissions)
-    });*/
-    /* Client side speaker
-  
-  Button to lower hands 
-  socket.emit('lowerHand' )(*/
 
     socket.on("lowerhand", () => {
       resetHandRaiseInfo();
