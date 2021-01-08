@@ -175,6 +175,7 @@ io.on("connection", (socket) => {
       }`
     );
   });
+
   socket.on("handRaised", ({ name, topic, picture }) => {
     addHandRaiseInfo({
       id: socket.id,
@@ -191,10 +192,10 @@ io.on("connection", (socket) => {
     io.to("raisehand").emit("handRaiseInfo", {
       handRaiseData: getHandRaiseInfo(),
     });
+  });
 
-    socket.on("lowerhand", () => {
-      resetHandRaiseInfo();
-    });
+  socket.on("lowerhand", () => {
+    resetHandRaiseInfo();
   });
 });
 module.exports = socketAPI;
