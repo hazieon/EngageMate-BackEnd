@@ -20,6 +20,7 @@ function addHandRaiseInfo(dataObj) {
     handRaiseSubmissions = [...handRaiseSubmissions, dataObj];
     console.log(`Added to submissions:`, dataObj);
   }
+  return handRaiseSubmissions;
 }
 //reset submissions - clear the submissions array
 function resetHandRaiseInfo() {
