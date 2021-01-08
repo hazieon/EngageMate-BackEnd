@@ -38,6 +38,7 @@ const {
   addHandRaiseInfo,
   resetHandRaiseInfo,
   handRaiseSubmissons,
+  removeHandByID,
 } = require("./utils/handRaiseData");
 
 socketAPI.io = io;
@@ -179,26 +180,30 @@ io.on("connection", (socket) => {
     socket.leave("raisehand");
     console.log("user has left the room");
   });
-  // socket.on("handRaised", ({ name, topic, picture }) => {
-  //   addHandRaiseInfo({
-  //     id: socket.id,
-  //     name: name,
-  //     topic: topic,
-  //     picture: picture,
-  //     time: moment().format("h:mm:ss a"),
-  //   });
+  socket.on("handRaised", ({ name, topic, picture, handRaised }) => {
+    addHandRaiseInfo({
+      id: socket.id,
+      name: name,
+      topic: topic,
+      picture: picture,
+      handRaise: handRaised,
+      time: moment().format("h:mm:ss a"),
+    });
 
-  //   console.log(
-  //     `Someone has raised their hand: \n socket_id: ${socket.id} \n name ${name} \n topic ${topic} \n `
-  //   );
+    console.log(
+      `Someone has raised their hand: \n socket_id: ${socket.id} \n name ${name} \n topic ${topic} \n `
+    );
 
-  //   io.to("raisehand").emit("handRaiseInfo", {
-  //     handRaiseData: getHandRaiseInfo(),
-  //   });
+    io.to("raisehand").emit("handRaiseInfo", {
+      handRaiseData: getHandRaiseInfo(),
+    });
 
-  //   socket.on("lowerhand", () => {
-  //     resetHandRaiseInfo();
-  //   });
-  // });
+    socket.on("lowerhand", ({ data }) => {
+      console.log("hand lowered");
+      console.log(data);
+      removeHandByID(data);
+      // add function to remove only that socketid hand raise info
+    });
+  });
 });
 module.exports = socketAPI;
