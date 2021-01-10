@@ -197,5 +197,12 @@ io.on("connection", (socket) => {
   socket.on("lowerhand", () => {
     resetHandRaiseInfo();
   });
+
+  // Mass Message
+  socket.on("massMessage", ({ message }) => {
+    socket.broadcast.emit("messageToAll", { message });
+    console.log("Message sent to all users");
+  });
 });
+
 module.exports = socketAPI;
