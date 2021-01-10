@@ -200,8 +200,8 @@ io.on("connection", (socket) => {
 
   // Mass Message
   socket.on("massMessage", ({ message }) => {
-    io.emit("messageToAll", { message });
-    console.log("Mesage sent to all users");
+    socket.broadcast.emit("messageToAll", { message });
+    console.log("Message sent to all users");
   });
 });
 
