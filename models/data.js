@@ -6,7 +6,7 @@ async function getAllUsers() {
 }
 
 async function getAllSessions() {
-  const result = await query(`SELECT * FROM session ORDER BY date`);
+  const result = await query(`SELECT * FROM session ORDER BY id`);
   return result.rows;
 }
 
