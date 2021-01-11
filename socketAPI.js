@@ -177,6 +177,15 @@ io.on("connection", (socket) => {
     );
   });
 
+  socket.on("leaveRaiseHand", () => {
+    try {
+      socket.leave("raisehand");
+      console.log("user left room");
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
   socket.on("handRaised", ({ name, topic, picture }) => {
     addHandRaiseInfo({
       id: socket.id,
