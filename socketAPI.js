@@ -180,7 +180,7 @@ io.on("connection", (socket) => {
   socket.on("handRaised", ({ name, topic, picture }) => {
     addHandRaiseInfo({
       id: socket.id,
-      name: name,
+      name: name || "",
       topic: topic,
       picture: picture,
       time: moment().format("h:mm:ss a"),
