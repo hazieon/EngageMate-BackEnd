@@ -38,6 +38,7 @@ const {
   addHandRaiseInfo,
   resetHandRaiseInfo,
   handRaiseSubmissons,
+  updateHandRaiseInfo,
 } = require("./utils/handRaiseData");
 
 socketAPI.io = io;
@@ -194,8 +195,13 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("lowerhand", () => {
-    resetHandRaiseInfo();
+  socket.on("lowerhand", (socket) => {
+    updateHandRaiseInfo(socket.id);
+    /* Remove person who has lowered their hand from the array via the socket.id
+    emit new braodcast information using io.to('raishand') */
+    io.to("raisehand").emit("handRaiseInfo", {
+      handRaiseData: getHandRaiseInfo(),
+    });
   });
 });
 module.exports = socketAPI;
