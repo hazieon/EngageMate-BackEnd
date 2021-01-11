@@ -195,16 +195,20 @@ io.on("connection", (socket) => {
     });
   });
 
+  function participantLowerHand() {
+    io.emit("participantLowerHand", {
+      id: socket.id,
+    });
+  }
+
   socket.on("speakerLowerHand", ({ id }) => {
     console.log(`data received ${id}`);
     updateHandRaiseInfo(id);
 
+    participantLowerHand();
+
     io.to("raisehand").emit("handRaiseInfo", {
       handRaiseData: getHandRaiseInfo(),
-    });
-
-    socket.emit("participantLowerHand", {
-      id: socket.id,
     });
   });
 
