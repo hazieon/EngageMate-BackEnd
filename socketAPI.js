@@ -38,6 +38,7 @@ const {
   addHandRaiseInfo,
   resetHandRaiseInfo,
   handRaiseSubmissons,
+  updateHandRaiseInfo,
 } = require("./utils/handRaiseData");
 
 socketAPI.io = io;
@@ -174,12 +175,25 @@ io.on("connection", (socket) => {
         user.room
       }`
     );
+
+    io.to("raisehand").emit("handRaiseInfo", {
+      handRaiseData: getHandRaiseInfo(),
+    });
+  });
+
+  socket.on("leaveRaiseHand", () => {
+    try {
+      socket.leave("raisehand");
+      console.log("user left room");
+    } catch (err) {
+      console.log(err);
+    }
   });
 
   socket.on("handRaised", ({ name, topic, picture }) => {
     addHandRaiseInfo({
       id: socket.id,
-      name: name,
+      name: name || "",
       topic: topic,
       picture: picture,
       time: moment().format("h:mm:ss a"),
@@ -194,8 +208,30 @@ io.on("connection", (socket) => {
     });
   });
 
+  function participantLowerHand(id) {
+    io.emit("participantLowerHand", {
+      myUniqueNumber: id,
+    });
+  }
+
+  socket.on("speakerLowerHand", ({ id }) => {
+    console.log(`data received ${id}`);
+    updateHandRaiseInfo(id);
+
+    participantLowerHand(id);
+
+    io.to("raisehand").emit("handRaiseInfo", {
+      handRaiseData: getHandRaiseInfo(),
+    });
+  });
+
   socket.on("lowerhand", () => {
-    resetHandRaiseInfo();
+    updateHandRaiseInfo(socket.id);
+    /* Remove person who has lowered their hand from the array via the socket.id
+    emit new braodcast information using io.to('raishand') */
+    io.to("raisehand").emit("handRaiseInfo", {
+      handRaiseData: getHandRaiseInfo(),
+    });
   });
 
   // Mass Message

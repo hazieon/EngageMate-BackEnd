@@ -11,6 +11,20 @@ function getHandRaiseInfo() {
   return handRaiseSubmissions;
 }
 
+function updateHandRaiseInfo(id) {
+  let result = checkExists(id);
+  if (result >= 0) {
+    handRaiseSubmissions = [
+      ...handRaiseSubmissions.slice(0, result),
+      ...handRaiseSubmissions.slice(result + 1),
+    ];
+
+    console.log("success: hand removed");
+  } else {
+    console.log("no hand to remove");
+  }
+}
+
 function addHandRaiseInfo(dataObj) {
   // id , name topic , picture, time
   let result = checkExists(dataObj.id);
@@ -32,4 +46,5 @@ module.exports = {
   addHandRaiseInfo,
   resetHandRaiseInfo,
   handRaiseSubmissions,
+  updateHandRaiseInfo,
 };
