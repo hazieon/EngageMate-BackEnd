@@ -196,6 +196,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("speakerLowerHand", ({ id }) => {
+    console.log(`data received ${id}`);
     updateHandRaiseInfo(id);
 
     io.to("raisehand").emit("handRaiseInfo", {
