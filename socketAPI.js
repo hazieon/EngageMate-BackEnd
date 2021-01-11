@@ -175,6 +175,10 @@ io.on("connection", (socket) => {
         user.room
       }`
     );
+
+    io.to("raisehand").emit("handRaiseInfo", {
+      handRaiseData: getHandRaiseInfo(),
+    });
   });
 
   socket.on("leaveRaiseHand", () => {
