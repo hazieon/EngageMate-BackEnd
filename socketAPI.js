@@ -195,6 +195,18 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("speakerLowerHand", ({ id }) => {
+    updateHandRaiseInfo(id);
+
+    io.to("raisehand").emit("handRaiseInfo", {
+      handRaiseData: getHandRaiseInfo(),
+    });
+
+    socket.emit("participantLowerHand", {
+      id: socket.id,
+    });
+  });
+
   socket.on("lowerhand", () => {
     updateHandRaiseInfo(socket.id);
     /* Remove person who has lowered their hand from the array via the socket.id
