@@ -195,9 +195,9 @@ io.on("connection", (socket) => {
     });
   });
 
-  function participantLowerHand() {
+  function participantLowerHand(id) {
     io.emit("participantLowerHand", {
-      id: socket.id,
+      myUniqueNumber: id,
     });
   }
 
@@ -205,7 +205,7 @@ io.on("connection", (socket) => {
     console.log(`data received ${id}`);
     updateHandRaiseInfo(id);
 
-    participantLowerHand();
+    participantLowerHand(id);
 
     io.to("raisehand").emit("handRaiseInfo", {
       handRaiseData: getHandRaiseInfo(),
