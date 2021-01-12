@@ -3,6 +3,8 @@ const moment = require("moment");
 const { server } = require("./app");
 let io = socket_io(server);
 let socketAPI = {};
+
+//SocketAPI contains our socket functions for dealing with users, session data, etc.
 const {
   userJoin,
   users,
