@@ -214,11 +214,24 @@ io.on("connection", (socket) => {
     });
   }
 
+  function speakerLowersAllHands() {
+    io.emit("speakerLowerAllHands");
+  }
+
   socket.on("speakerLowerHand", ({ id }) => {
     console.log(`data received ${id}`);
     updateHandRaiseInfo(id);
 
     participantLowerHand(id);
+
+    io.to("raisehand").emit("lowerHandRaiseInfo", {
+      handRaiseData: getHandRaiseInfo(),
+    });
+  });
+
+  socket.on("lowerAllHands", () => {
+    resetHandRaiseInfo();
+    speakerLowersAllHands();
 
     io.to("raisehand").emit("lowerHandRaiseInfo", {
       handRaiseData: getHandRaiseInfo(),
