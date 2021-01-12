@@ -41,6 +41,13 @@ const {
   updateHandRaiseInfo,
 } = require("./utils/handRaiseData");
 
+const {
+  setResultsData,
+  getResultsData,
+  updateResultsData,
+  resetResultsData,
+} = require("./utils/livePoll.js");
+
 socketAPI.io = io;
 
 // Global Variables
@@ -238,6 +245,33 @@ io.on("connection", (socket) => {
   socket.on("massMessage", ({ message }) => {
     socket.broadcast.emit("messageToAll", { message });
     console.log("Message sent to all users");
+  });
+
+  // Live Poll
+  socket.on("pollStart", ({ data }) => {
+    console.log("Poll Started");
+    resetResultsData();
+
+    // set resultData object up
+    setResultsData(data);
+
+    io.emit("pollStart", { data: getResultsData() }); // send lastest resultData
+  });
+
+  socket.on("vote", ({ data }) => {
+    console.log("vote received");
+    console.log("updating results data ...");
+    //update resultData
+    updateResultsData(data);
+
+    console.log("Broadcasting updated data");
+    io.emit("resultsUpdate", { data: getResultsData() }); // send latest resultData
+  });
+
+  socket.on("sessionStop", () => {
+    // save resultData to db?
+    console.log("Session Stopped");
+    io.emit("sessionStop");
   });
 });
 
