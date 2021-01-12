@@ -250,6 +250,7 @@ io.on("connection", (socket) => {
   // Live Poll
   socket.on("pollStart", ({ data }) => {
     console.log("Poll Started");
+    resetResultsData();
 
     // set resultData object up
     setResultsData(data);

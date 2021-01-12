@@ -13,7 +13,14 @@ function getResultsData() {
   return resultsData;
 }
 
-function updateResultsData(data) {}
+function updateResultsData(data) {
+  /* const obj = resultsData.find((option) => option[0] === data.option);
+  if (obj[3] === undefined) {
+    obj[3] = 1;
+  } else {
+    obj += 1;
+  } */
+}
 
 function resetResultsData() {
   resultsData = {};
