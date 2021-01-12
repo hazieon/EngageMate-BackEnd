@@ -220,7 +220,7 @@ io.on("connection", (socket) => {
 
     participantLowerHand(id);
 
-    io.to("raisehand").emit("handRaiseInfoTest", {
+    io.to("raisehand").emit("lowerHandRaiseInfo", {
       handRaiseData: getHandRaiseInfo(),
     });
   });
@@ -229,7 +229,7 @@ io.on("connection", (socket) => {
     updateHandRaiseInfo(socket.id);
     /* Remove person who has lowered their hand from the array via the socket.id
     emit new braodcast information using io.to('raishand') */
-    io.to("raisehand").emit("handRaiseInfoTest", {
+    io.to("raisehand").emit("lowerHandRaiseInfo", {
       handRaiseData: getHandRaiseInfo(),
     });
   });
