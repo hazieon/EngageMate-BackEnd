@@ -134,7 +134,7 @@ io.on("connection", (socket) => {
     let thumbSubmissionsFetch = getThumbSubmissions();
     updateSession("responses", thumbSubmissionsFetch.length); //updates session data obj with number of submissions
     let thumbometerValue = calculateSubmissions(); //calculates the total submissions value for thumbometer
-    updateSession("outcome", thumbometerValue); //updates session data obj with the calculated total value
+    updateSession("outcome", Math.round(thumbometerValue)); //updates session data obj with the calculated total value
 
     // emit updated session data to everyone -> emit to speakers real time
     io.to("thumbometer").emit("thumbUpdate", {
