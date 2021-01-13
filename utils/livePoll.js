@@ -14,7 +14,7 @@ function getResultsData() {
 }
 
 function updateResultsData(data) {
-  const obj = resultsData.find((option) => option[0] === data.option);
+  const obj = resultsData.options.find((option) => option[0] === data);
   if (obj[3] === undefined) {
     obj[3] = 1;
   } else {
