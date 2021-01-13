@@ -14,12 +14,12 @@ function getResultsData() {
 }
 
 function updateResultsData(data) {
-  /* const obj = resultsData.find((option) => option[0] === data.option);
+  const obj = resultsData.find((option) => option[0] === data.option);
   if (obj[3] === undefined) {
     obj[3] = 1;
   } else {
-    obj += 1;
-  } */
+    obj[3] += 1;
+  }
 }
 
 function resetResultsData() {
