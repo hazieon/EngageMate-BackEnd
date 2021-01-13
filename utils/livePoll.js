@@ -20,6 +20,8 @@ function updateResultsData(data) {
   } else {
     obj[3] += 1;
   }
+
+  console.log("Updated results object: ", getResultsData());
 }
 
 function resetResultsData() {
