@@ -166,7 +166,26 @@ io.on("connection", (socket) => {
   });
 
   /////////////////////////////// Hand Raised ///////////////////////////
+  socket.on("mainmenuroom", ({ name, room }) => {
+    // add user to the user list
+    const user = handRaiser(socket.id, name, room);
 
+    // socket.join(user.room)
+    socket.join(user.room);
+
+    // console.log(user has joined room, updated amount of participants)
+    console.log(`${user.name} has joined room ${user.room}`);
+    console.log(`${handRaisers.length} users connected`);
+    console.log(
+      `${getNumberOfhandRaisersByRoom(user.room).length} user(s) in room ${
+        user.room
+      }`
+    );
+
+    io.to("mainmenu").emit("handRaiseInfo", {
+      handRaiseData: getHandRaiseInfo(),
+    });
+  });
   socket.on("raisehandroom", ({ name, room }) => {
     // add user to the user list
     const user = handRaiser(socket.id, name, room);
@@ -210,14 +229,17 @@ io.on("connection", (socket) => {
       `Someone has raised their hand: \n socket_id: ${socket.id} \n name ${name} \n topic ${topic} \n `
     );
 
-    socket.broadcast.emit("handRaiseInfo", {
-      handRaiseData: getHandRaiseInfo(),
-    });
-    console.log("Message sent to all users");
-
-    // io.to("raisehand").emit("handRaiseInfo", {
+    // socket.broadcast.emit("handRaiseInfo", {
     //   handRaiseData: getHandRaiseInfo(),
     // });
+    // console.log("Message sent to all users");
+
+    io.to("raisehand").emit("handRaiseInfo", {
+      handRaiseData: getHandRaiseInfo(),
+    });
+    io.to("mainmenu").emit("handRaiseInfo", {
+      handRaiseData: getHandRaiseInfo(),
+    });
   });
 
   function participantLowerHand(id) {
@@ -232,13 +254,16 @@ io.on("connection", (socket) => {
 
     participantLowerHand(id);
 
-    socket.broadcast.emit("lowerHandRaiseInfo", {
-      handRaiseData: getHandRaiseInfo(),
-    });
-
-    // io.to("raisehand").emit("lowerHandRaiseInfo", {
+    // socket.broadcast.emit("lowerHandRaiseInfo", {
     //   handRaiseData: getHandRaiseInfo(),
     // });
+
+    io.to("raisehand").emit("lowerHandRaiseInfo", {
+      handRaiseData: getHandRaiseInfo(),
+    });
+    io.to("mainmenu").emit("lowerHandRaiseInfo", {
+      handRaiseData: getHandRaiseInfo(),
+    });
   });
 
   socket.on("lowerhand", () => {
@@ -246,12 +271,15 @@ io.on("connection", (socket) => {
     /* Remove person who has lowered their hand from the array via the socket.id
     emit new braodcast information using io.to('raishand') */
 
-    socket.broadcast.emit("lowerHandRaiseInfo", {
-      handRaiseData: getHandRaiseInfo(),
-    });
-    // io.to("raisehand").emit("lowerHandRaiseInfo", {
+    // socket.broadcast.emit("lowerHandRaiseInfo", {
     //   handRaiseData: getHandRaiseInfo(),
     // });
+    io.to("mainmenu").emit("lowerHandRaiseInfo", {
+      handRaiseData: getHandRaiseInfo(),
+    });
+    io.to("raisehand").emit("lowerHandRaiseInfo", {
+      handRaiseData: getHandRaiseInfo(),
+    });
   });
 
   // Mass Message
