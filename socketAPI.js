@@ -210,9 +210,13 @@ io.on("connection", (socket) => {
       `Someone has raised their hand: \n socket_id: ${socket.id} \n name ${name} \n topic ${topic} \n `
     );
 
-    io.to("raisehand").emit("handRaiseInfo", {
+    socket.emit("handRaiseInfo", {
       handRaiseData: getHandRaiseInfo(),
     });
+
+    // io.to("raisehand").emit("handRaiseInfo", {
+    //   handRaiseData: getHandRaiseInfo(),
+    // });
   });
 
   function participantLowerHand(id) {
@@ -227,18 +231,26 @@ io.on("connection", (socket) => {
 
     participantLowerHand(id);
 
-    io.to("raisehand").emit("lowerHandRaiseInfo", {
+    socket.emit("handRaiseInfo", {
       handRaiseData: getHandRaiseInfo(),
     });
+
+    // io.to("raisehand").emit("lowerHandRaiseInfo", {
+    //   handRaiseData: getHandRaiseInfo(),
+    // });
   });
 
   socket.on("lowerhand", () => {
     updateHandRaiseInfo(socket.id);
     /* Remove person who has lowered their hand from the array via the socket.id
     emit new braodcast information using io.to('raishand') */
-    io.to("raisehand").emit("lowerHandRaiseInfo", {
+
+    socket.emit("handRaiseInfo", {
       handRaiseData: getHandRaiseInfo(),
     });
+    // io.to("raisehand").emit("lowerHandRaiseInfo", {
+    //   handRaiseData: getHandRaiseInfo(),
+    // });
   });
 
   // Mass Message
