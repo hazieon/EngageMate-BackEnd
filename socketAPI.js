@@ -210,7 +210,7 @@ io.on("connection", (socket) => {
       `Someone has raised their hand: \n socket_id: ${socket.id} \n name ${name} \n topic ${topic} \n `
     );
 
-    socket.emit("handRaiseInfo", {
+    io.emit("handRaiseInfo", {
       handRaiseData: getHandRaiseInfo(),
     });
 
@@ -231,7 +231,7 @@ io.on("connection", (socket) => {
 
     participantLowerHand(id);
 
-    socket.emit("handRaiseInfo", {
+    io.emit("lowerHandRaiseInfo", {
       handRaiseData: getHandRaiseInfo(),
     });
 
@@ -245,7 +245,7 @@ io.on("connection", (socket) => {
     /* Remove person who has lowered their hand from the array via the socket.id
     emit new braodcast information using io.to('raishand') */
 
-    socket.emit("handRaiseInfo", {
+    io.emit("lowerHandRaiseInfo", {
       handRaiseData: getHandRaiseInfo(),
     });
     // io.to("raisehand").emit("lowerHandRaiseInfo", {
