@@ -11,4 +11,7 @@ module.exports = {
   query: function (text, params, callback) {
     return pool.query(text, params, callback);
   },
+  close: function () {
+    return pool.end();
+  },
 };

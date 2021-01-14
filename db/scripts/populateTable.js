@@ -67,3 +67,5 @@ const populateTable = async () => {
   }
 };
 populateTable();
+
+module.exports = { userData };
