@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users(
     id SERIAL PRIMARY KEY,
     uuid VARCHAR,
-    bootcamperId VARCHAR,
+    bootcamperId VARCHAR DEFAULT 0000,
     firstName VARCHAR,
     surname VARCHAR,
     role VARCHAR,
