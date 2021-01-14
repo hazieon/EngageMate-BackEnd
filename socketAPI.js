@@ -289,6 +289,7 @@ io.on("connection", (socket) => {
   });
 
   // Live Poll
+  let pollIntervalId;
   socket.on("pollStart", ({ data }) => {
     console.log("Poll Started");
     resetResultsData();
@@ -296,7 +297,10 @@ io.on("connection", (socket) => {
     // set resultData object up
     setResultsData(data);
 
-    io.emit("pollStart", { data: getResultsData() }); // send lastest resultData
+    pollIntervalId = setInterval(() => {
+      console.log(`Interval started: ${pollIntervalId}`);
+      io.emit("pollStart", { data: getResultsData() }); // send lastest resultData
+    }, 500);
   });
 
   socket.on("vote", ({ data }) => {
@@ -312,6 +316,8 @@ io.on("connection", (socket) => {
   socket.on("sessionStop", () => {
     // save resultData to db?
     console.log("Session Stopped");
+    clearInterval(pollIntervalId);
+    console.log("poll interval stopped");
     io.emit("sessionStop");
   });
 });
