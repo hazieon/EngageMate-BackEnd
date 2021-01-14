@@ -14,6 +14,7 @@ function getResultsData() {
 }
 
 function updateResultsData(data) {
+  data = Number(data);
   const obj = resultsData.options.find((option) => option[0] === data);
   if (obj) obj[2] = obj[2] += 1;
 
