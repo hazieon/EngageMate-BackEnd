@@ -2,7 +2,7 @@ var createError = require("http-errors");
 var express = require("express");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-
+var bodyParser = require("body-parser");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var sessionRouter = require("./routes/session");
@@ -15,6 +15,13 @@ app.use(cors());
 
 // view engine setup
 
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: false,
+  })
+);
 app.use(logger("dev"));
 app.use(express.json());
 // app.use(express.urlencoded({ extended: false }));
