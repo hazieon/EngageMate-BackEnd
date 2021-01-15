@@ -14,12 +14,11 @@ function getResultsData() {
 }
 
 function updateResultsData(data) {
-  /* const obj = resultsData.find((option) => option[0] === data.option);
-  if (obj[3] === undefined) {
-    obj[3] = 1;
-  } else {
-    obj += 1;
-  } */
+  data = Number(data);
+  const obj = resultsData.options.find((option) => option[0] === data);
+  if (obj) obj[2] = obj[2] += 1;
+
+  console.log("Updated results object: ", getResultsData());
 }
 
 function resetResultsData() {
