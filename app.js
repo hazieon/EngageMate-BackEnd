@@ -32,7 +32,7 @@ app.use("/users", usersRouter);
 app.use("/session", sessionRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
@@ -50,5 +50,6 @@ app.use(function(req, res, next) {
 app.listen(3001, () => {
   console.log("listening on port 3001");
 });
+//app.close would need to connect to this db in this fil
 
 module.exports = app;
