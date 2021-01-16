@@ -160,7 +160,7 @@ io.on("connection", (socket) => {
   socket.on("leaveThumb", () => {
     socket.leave("thumbometer");
     const result = userLeave(socket.id);
-    console.log(`User ${left} room thumbometer`);
+    console.log(`User ${result} room thumbometer`);
   });
 
   socket.on("disconnect", () => {
