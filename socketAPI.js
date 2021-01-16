@@ -157,12 +157,14 @@ io.on("connection", (socket) => {
     // send the final state of the session data.
   });
 
-  socket.on("disconnect", () => {
-    console.log(`A user has left!`);
+  socket.on("leaveThumb", () => {
+    socket.leave("thumbometer");
     const result = userLeave(socket.id);
-    console.log(`disconnect success result:`, {
-      result,
-    });
+    console.log(`User ${left} room thumbometer`);
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`A user disconnected`);
   });
 
   /////////////////////////////// Hand Raised ///////////////////////////
