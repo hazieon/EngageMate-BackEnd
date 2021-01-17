@@ -157,12 +157,14 @@ io.on("connection", (socket) => {
     // send the final state of the session data.
   });
 
-  socket.on("disconnect", () => {
-    console.log(`A user has left!`);
+  socket.on("leaveThumb", () => {
+    socket.leave("thumbometer");
     const result = userLeave(socket.id);
-    console.log(`disconnect success result:`, {
-      result,
-    });
+    console.log(`User left room thumbometer`);
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`A user disconnected`);
   });
 
   /////////////////////////////// Hand Raised ///////////////////////////
@@ -171,7 +173,11 @@ io.on("connection", (socket) => {
     const user = handRaiser(socket.id, name, room);
 
     // socket.join(user.room)
-    socket.join(user.room);
+    if (!io.sockets.adapter.rooms["mainmenu"]) {
+      socket.join(user.room);
+    } else {
+      console.log('Join "mainmenu" room denied - socket already joined');
+    }
 
     // console.log(user has joined room, updated amount of participants)
     console.log(`${user.name} has joined room ${user.room}`);
