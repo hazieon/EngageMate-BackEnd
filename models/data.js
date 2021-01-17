@@ -74,7 +74,7 @@ async function addSession(session) {
 
 async function deleteUser(id) {
   const result = await query(
-    `DELETE FROM users WHERE bootcamperId = $1 RETURNING bootcamperId`,
+    `DELETE FROM users WHERE email = $1 RETURNING email`,
     [id]
   );
   //console.log (result.rows[0])
