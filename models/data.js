@@ -72,10 +72,10 @@ async function addSession(session) {
   return result.rows[0];
 }
 
-async function deleteUser(id) {
+async function deleteUser(email) {
   const result = await query(
     `DELETE FROM users WHERE email = $1 RETURNING email`,
-    [id]
+    [email]
   );
   //console.log (result.rows[0])
   return result.rows[0];
