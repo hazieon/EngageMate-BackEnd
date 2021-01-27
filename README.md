@@ -18,8 +18,8 @@ Watch our presentation and live application demo here:
 https://youtu.be/p23oB7cUReQ
 
 
-# EngageMate features
-# Thumbometer™
+## EngageMate features
+### Thumbometer™
 A 'thumbs up or thumbs down' temperature checking tool to get consensus from a group.
 Get visual, anonymous feedback from a group of participants quickly.
 We used React components and websockets to build this feature, with results being posted to the PostgreSQL database.
@@ -46,7 +46,7 @@ A single resource for our client, the School of Code, to access, organise and pl
 The point of the application that allows viewing and editing of EngageMate database data. Here, session data can be filtered, sorted and deleted. 
 Users can also be removed or new users added, with the option to do this in bulk from an external file to save time upon the uptake of a new bootcamp cohort.
 
-# Core Technologies:
+## Core Technologies:
 - React 
 - Node
 - Socket.io
