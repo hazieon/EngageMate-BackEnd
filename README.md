@@ -1,4 +1,4 @@
-### EngageMate
+# EngageMate
 Your companion tool to track and measure engagement in real time! 
 A four week, full stack project for School of Code, aiming to improve remote teaching. Our team of 6 was called The Callback Cats(). 
 We built a remote learning companion tool in React, Node and websockets to form features such as the 'Thumbometer™', raise hand, live poll and an admin section.
@@ -18,13 +18,13 @@ Watch our presentation and live application demo here:
 https://youtu.be/p23oB7cUReQ
 
 
-## EngageMate features
+# EngageMate features
 # Thumbometer™
 A 'thumbs up or thumbs down' temperature checking tool to get consensus from a group.
 Get visual, anonymous feedback from a group of participants quickly.
 We used React components and websockets to build this feature, with results being posted to the PostgreSQL database.
 
-# Raise Hand
+### Raise Hand
 Aiming to improve Zoom's native feature, we created a tool for learners to indicate when they have a question and the topic of their question.
 Our user research told us that Zoom's raise hand feature:
 is not prominent or easy to find, 
@@ -34,19 +34,19 @@ does not give context or topics for the questions waiting to be asked.
 
 Our app aims to provide a solution to these issues.
 
-# Live Poll
+### Live Poll
 Our user research showed that although learner participants enjoy the interactive nature of (Zoom) polls, they are underused.
 Similarly, coaches told us that this feature was hard to find and set up.
 We implemented a live quiz feature in EngageMate.
 
-# Dj deck 
+### Dj deck 
 A single resource for our client, the School of Code, to access, organise and play musical jingles, voice notes or music tracks to keep bootcampers energised.
 
-# Admin page
+### Admin page
 The point of the application that allows viewing and editing of EngageMate database data. Here, session data can be filtered, sorted and deleted. 
 Users can also be removed or new users added, with the option to do this in bulk from an external file to save time upon the uptake of a new bootcamp cohort.
 
-## Core Technologies:
+# Core Technologies:
 - React 
 - Node
 - Socket.io
